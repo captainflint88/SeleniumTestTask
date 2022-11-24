@@ -11,7 +11,7 @@ sql_request_for_test_4 = "UPDATE Customers SET CustomerName='noName', ContactNam
 sql_request_for_test_4_check = "SELECT * FROM [Customers]"
 
 
-class TestSuite1(BaseTest):
+class TestMainPage(BaseTest):
 
     def setUp(self):
         super().setUp()
