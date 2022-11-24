@@ -8,7 +8,16 @@ class MainPageLocators:
     CODE_MIRROR = (By.CSS_SELECTOR, ".CodeMirror")
     TABLE_WITH_RESULT = (By.XPATH, "//*[@id='divResultSQL']/div/table/tbody")
     NUMBER_OF_ROWS_IN_CUSTOMER_TABLE = (By.XPATH, "//*[@id='yourDB']/table/tbody/tr[2]/td[2]")
+    RESULT_MESSAGE_WITH_NUMBER_OF_RECORDS = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/div")
+    LIST_OF_ROWS_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr")
 
+    CELL_1_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[1]")
+    CELL_2_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[2]")
+    CELL_3_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[3]")
+    CELL_4_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[4]")
+    CELL_5_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[5]")
+    CELL_6_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[6]")
+    CELL_7_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[7]")
 
 class MainPageHelper(BasePageHelper):
 

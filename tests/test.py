@@ -7,7 +7,7 @@ sql_request_for_test_1 = "SELECT * FROM Customers WHERE ContactName = 'Giovanni 
 sql_request_for_test_2 = "SELECT * FROM Customers WHERE City = 'London'"
 sql_request_for_test_3 = "INSERT INTO CUSTOMERS VALUES (92, 'noName', 'noContactName', 'noAdress', 'noCity', 000000, 'noCountry')"
 sql_request_for_test_3_check = "SELECT * FROM Customers WHERE ContactName = 'noContactName'"
-sql_request_for_test_4 = "UPDATE Customers SET CustomerName='noName', ContactName='noContactName', Address = 'noAdress', City ='noCity', PostalCode = 000000, Country = 'noCountry' WHERE CustomerID=1"
+sql_request_for_test_4 = "UPDATE Customers SET CustomerName='noName', ContactName='noContactName', Address = 'noAdress', City ='noCity', PostalCode = '000000', Country = 'noCountry' WHERE CustomerID=1"
 sql_request_for_test_4_check = "SELECT * FROM [Customers]"
 
 
@@ -23,7 +23,7 @@ class TestSuite1(BaseTest):
         self.main_page.send_query_in_sql_field(sql_request_for_test_1)
         self.main_page.click_button_run_sql()
         self.main_page.wait_for_result_table()
-        assert self.driver.find_element(By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[4]").text == "Via Ludovico il Moro 22"
+        assert self.main_page.find_element(MainPageLocators.CELL_4_OF_FIRST_ROW_IN_RESULT_TABLE).text == "Via Ludovico il Moro 22"
 
     def test_amount_of_rows_in_customer_table_is_correct(self):
         driver = self.driver
@@ -31,8 +31,8 @@ class TestSuite1(BaseTest):
         self.main_page.send_query_in_sql_field(sql_request_for_test_2)
         self.main_page.click_button_run_sql()
         self.main_page.wait_for_result_table()
-        assert self.driver.find_element(By.XPATH, "//*[@id=\"divResultSQL\"]/div/div").text == "Number of Records: 6"
-        assert len(self.driver.find_elements(By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr")) == 7
+        assert self.main_page.find_element(MainPageLocators.RESULT_MESSAGE_WITH_NUMBER_OF_RECORDS).text == "Number of Records: 6"
+        assert len(self.main_page.find_elements(MainPageLocators.LIST_OF_ROWS_IN_RESULT_TABLE)) == 7
 
     def test_add_row_in_table_and_check_amount_of_rows(self):
         driver = self.driver
@@ -48,7 +48,7 @@ class TestSuite1(BaseTest):
         self.main_page.send_query_in_sql_field(sql_request_for_test_3_check)
         self.main_page.click_button_run_sql()
         self.main_page.wait_for_result_table()
-        assert self.driver.find_element(By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[4]").text == "noAdress"
+        assert self.main_page.find_element(MainPageLocators.CELL_4_OF_FIRST_ROW_IN_RESULT_TABLE).text == "noAdress"
 
     def test_update_all_fields_in_one_row_of_customer_table_and_check_update(self):
         driver = self.driver
@@ -59,7 +59,13 @@ class TestSuite1(BaseTest):
         self.main_page.send_query_in_sql_field(sql_request_for_test_4_check)
         self.main_page.click_button_run_sql()
         self.main_page.wait_for_result_table()
-        assert self.driver.find_element(By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[4]").text == "noAdress"
+        assert self.main_page.find_element(MainPageLocators.CELL_1_OF_FIRST_ROW_IN_RESULT_TABLE).text == "1"
+        assert self.main_page.find_element(MainPageLocators.CELL_2_OF_FIRST_ROW_IN_RESULT_TABLE).text == "noName"
+        assert self.main_page.find_element(MainPageLocators.CELL_3_OF_FIRST_ROW_IN_RESULT_TABLE).text == "noContactName"
+        assert self.main_page.find_element(MainPageLocators.CELL_4_OF_FIRST_ROW_IN_RESULT_TABLE).text == "noAdress"
+        assert self.main_page.find_element(MainPageLocators.CELL_5_OF_FIRST_ROW_IN_RESULT_TABLE).text == "noCity"
+        assert self.main_page.find_element(MainPageLocators.CELL_6_OF_FIRST_ROW_IN_RESULT_TABLE).text == "000000"
+        assert self.main_page.find_element(MainPageLocators.CELL_7_OF_FIRST_ROW_IN_RESULT_TABLE).text == "noCountry"
 
     def test_updates_in_database_are_saved_for_session(self):
         driver = self.driver
