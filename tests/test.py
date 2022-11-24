@@ -1,14 +1,14 @@
-from time import sleep
-
 from driver import BaseTest
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from main_page.MainPage import MainPageHelper, MainPageLocators
 
 page = "https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all"
 sql_request_for_test_1 = "SELECT * FROM Customers WHERE ContactName = 'Giovanni Rovelli'"
 sql_request_for_test_2 = "SELECT * FROM Customers WHERE City = 'London'"
-sql_request_for_test_3 = "INSERT INTO CUSTOMERS VALUES (92, 'John', 'Doe', 'noAdress', 'noCity', 000000, 'noCountry')"
+sql_request_for_test_3 = "INSERT INTO CUSTOMERS VALUES (92, 'noName', 'noContactName', 'noAdress', 'noCity', 000000, 'noCountry')"
+sql_request_for_test_3_check = "SELECT * FROM Customers WHERE ContactName = 'noContactName'"
+sql_request_for_test_4 = "UPDATE Customers SET CustomerName='noName', ContactName='noContactName', Address = 'noAdress', City ='noCity', PostalCode = 000000, Country = 'noCountry' WHERE CustomerID=1"
+sql_request_for_test_4_check = "SELECT * FROM [Customers]"
 
 
 class TestSuite1(BaseTest):
@@ -37,14 +37,36 @@ class TestSuite1(BaseTest):
     def test_add_row_in_table_and_check_amount_of_rows(self):
         driver = self.driver
         driver.get(page)
-        amount_of_rows = self.main_page.wait_until_visibility_of_element_located(MainPageLocators.NUMBER_OF_ROWS_IN_SMALL_TABLE)
+        # при открытии в инкогнито таблица с количеством записей в БД не отображается
+        # amount_of_rows = self.main_page.wait_until_visibility_of_element_located(MainPageLocators.NUMBER_OF_ROWS_IN_CUSTOMER_TABLE).text
         self.main_page.send_query_in_sql_field(sql_request_for_test_3)
         self.main_page.click_button_run_sql()
         self.main_page.find_element_by_text('You have made changes to the database. Rows affected: 1')
-        # self.main_page.wait_until_presence_of_element_located(By.XPATH, "//*[@id=\"yourDB\"]/table/tbody/tr[2]/td[2]")
-        new_amount_of_rows = self.driver.find_element(By.XPATH, "//*[@id=\"yourDB\"]/table/tbody/tr[2]/td[2]").text
-        assert amount_of_rows + 1 == new_amount_of_rows
+        # new_amount_of_rows = self.main_page.wait_until_visibility_of_element_located(MainPageLocators.NUMBER_OF_ROWS_IN_CUSTOMER_TABLE).text
+        # assert amount_of_rows + 1 == new_amount_of_rows
+        assert self.main_page.find_element(MainPageLocators.NUMBER_OF_ROWS_IN_CUSTOMER_TABLE, 10).text == "92"
+        self.main_page.send_query_in_sql_field(sql_request_for_test_3_check)
+        self.main_page.click_button_run_sql()
+        self.main_page.wait_for_result_table()
+        assert self.driver.find_element(By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[4]").text == "noAdress"
 
+    def test_update_all_fields_in_one_row_of_customer_table_and_check_update(self):
+        driver = self.driver
+        driver.get(page)
+        self.main_page.send_query_in_sql_field(sql_request_for_test_4)
+        self.main_page.click_button_run_sql()
+        self.main_page.find_element_by_text('You have made changes to the database. Rows affected: 1')
+        self.main_page.send_query_in_sql_field(sql_request_for_test_4_check)
+        self.main_page.click_button_run_sql()
+        self.main_page.wait_for_result_table()
+        assert self.driver.find_element(By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[4]").text == "noAdress"
 
-
-
+    def test_updates_in_database_are_saved_for_session(self):
+        driver = self.driver
+        driver.get(page)
+        self.main_page.send_query_in_sql_field(sql_request_for_test_3)
+        self.main_page.click_button_run_sql()
+        self.main_page.find_element_by_text('You have made changes to the database. Rows affected: 1')
+        driver.execute_script("window.open('" + page + "', '__blank__');")
+        driver.switch_to.window(driver.window_handles[1])
+        assert self.main_page.find_element(MainPageLocators.NUMBER_OF_ROWS_IN_CUSTOMER_TABLE, 10).text == "92"

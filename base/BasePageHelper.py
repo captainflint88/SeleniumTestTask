@@ -1,9 +1,6 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
-from selenium.common.exceptions import InvalidSelectorException, NoSuchElementException, WebDriverException, \
-    StaleElementReferenceException
-from _pytest.outcomes import fail, Failed
+from _pytest.outcomes import fail
 from selenium.common.exceptions import TimeoutException
 
 
