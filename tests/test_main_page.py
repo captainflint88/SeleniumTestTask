@@ -1,5 +1,4 @@
 from driver import BaseTest
-from selenium.webdriver.common.by import By
 from main_page.MainPage import MainPageHelper, MainPageLocators
 
 page = "https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all"
@@ -43,7 +42,7 @@ class TestMainPage(BaseTest):
         self.main_page.click_button_run_sql()
         self.main_page.find_element_by_text('You have made changes to the database. Rows affected: 1')
         # new_amount_of_rows = self.main_page.wait_until_visibility_of_element_located(MainPageLocators.NUMBER_OF_ROWS_IN_CUSTOMER_TABLE).text
-        # assert amount_of_rows + 1 == new_amount_of_rows
+        # assert int(amount_of_rows) + 1 == int(new_amount_of_rows)
         assert self.main_page.find_element(MainPageLocators.NUMBER_OF_ROWS_IN_CUSTOMER_TABLE, 10).text == "92"
         self.main_page.send_query_in_sql_field(sql_request_for_test_3_check)
         self.main_page.click_button_run_sql()

@@ -22,16 +22,3 @@ class BasePageHelper:
 
     def wait_until_presence_of_element_located(self, locator, time=10) -> object:
         return WebDriverWait(self.driver, time).until(EC.presence_of_element_located(locator))
-
-    def wait_until_visibility_of_element_located(self, locator, time=20):
-        return WebDriverWait(self.driver, time).until(EC.visibility_of_element_located(locator))
-
-    def every_downloads_chrome(self):
-        if not self.driver.current_url.startswith("chrome://downloads"):
-            self.driver.get("chrome://downloads/")
-        return self.driver.execute_script("""
-            var items = document.querySelector('downloads-manager')
-                .shadowRoot.getElementById('downloadsList').items;
-            if (items.every(e => e.state === "COMPLETE"))
-                return items.map(e => e.fileUrl || e.file_url);
-            """)

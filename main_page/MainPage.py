@@ -19,11 +19,11 @@ class MainPageLocators:
     CELL_6_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[6]")
     CELL_7_OF_FIRST_ROW_IN_RESULT_TABLE = (By.XPATH, "//*[@id=\"divResultSQL\"]/div/table/tbody/tr[2]/td[7]")
 
+
 class MainPageHelper(BasePageHelper):
 
     def send_query_in_sql_field(self, query):
         codeMirror = self.find_element(MainPageLocators.CODE_MIRROR)
-        # js = "function insterValue() {arguments[0].CodeMirror.setValue(" + query + ");} if(document.readyState === 'complete') {insterValue()} else {addEventListener('load', insterValue);}"
         self.driver.execute_script("arguments[0].CodeMirror.setValue(\"" + query + "\");", codeMirror)
 
     def click_button_run_sql(self):
